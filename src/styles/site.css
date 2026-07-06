@@ -26,3 +26,20 @@
   min-width: 1.7rem;
   padding: 0 0.4rem;
 }
+
+/* 카테고리 모아보기: 아이템별 주차(#이슈) 배지 — 제목 위 kicker */
+.issue-body ol li a .item-text .item-week {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  color: var(--ink-60);
+}
+.issue-body ol li a:hover .item-text .item-week { color: inherit; }
+
+/* 표지 성분표: 카테고리 행 → 모아보기 페이지 링크 affordance */
+.spec-row a {
+  text-decoration: underline;
+  text-decoration-color: var(--red);
+  text-underline-offset: 3px;
+}
+.spec-row a:hover { color: var(--red); }

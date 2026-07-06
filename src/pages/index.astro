@@ -77,6 +77,7 @@ const description = `매주 GeekNews Weekly에서 직접 고른 뉴스와 에디
         rows={stats.categoryCounts.map((c) => ({
           label: `${c.emoji} ${c.label}`,
           amt: `${c.count}건`,
+          href: `/category/${c.key}/`,
         }))}
         footNotes={[
           '체크([x])된 항목만 수록합니다.',

@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getAllWeeks } from '../../lib/weeks.ts';
+import { CATEGORY_META } from '../../lib/categories.ts';
+import type { Item } from '../../lib/parser.ts';
+
+interface Entry {
+  item: Item;
+  issue: number;
+  id: string;
+  period: string;
+}
+
+export function getStaticPaths() {
+  const weeks = getAllWeeks(); // 주차 오름차순 = 시간순
+  return CATEGORY_META.map((cat) => {
+    const entries: Entry[] = weeks.flatMap((week) => {
+      const group = week.categories.find((c) => c.key === cat.key);
+      return group
+        ? group.items.map((item) => ({
+            item,
+            issue: week.issue,
+            id: week.id,
+            period: week.period,
+          }))
+        : [];
+    });
+    return { params: { key: cat.key }, props: { cat, entries } };
+  });
+}
+
+interface Props {
+  cat: (typeof CATEGORY_META)[number];
+  entries: Entry[];
+}
+const { cat, entries } = Astro.props;
+
+const title = `${cat.label} — GeekNews 주간 칼럼 아카이브`;
+const description = `GeekNews Weekly에서 승인한 '${cat.label}' 카테고리 뉴스 ${entries.length}건을 시간순으로 모아봅니다.`;
+const range = entries.length > 0 ? `#${entries[0].issue}–#${entries[entries.length - 1].issue}` : '';
+---
+
+<BaseLayout title={title} description={description} pathname={`/category/${cat.key}/`}>
+  <article class="issue">
+    <a class="issue-back" href="/">← 표지로 돌아가기</a>
+
+    <header>
+      <div class="issue-head-meta">
+        <span class="no">{cat.emoji}</span>
+        <span>카테고리 모아보기</span>
+      </div>
+      <h1>{cat.label}</h1>
+      <div class="issue-tag">승인 {entries.length}건{range && ` · ${range}`} · 시간순</div>
+      <hr class="bar-8" />
+    </header>
+
+    <div class="issue-body">
+      {entries.length === 0 ? (
+        <p>아직 이 카테고리에 승인된 항목이 없습니다.</p>
+      ) : (
+        <ol>
+          {entries.map((e) => (
+            <li>
+              <a href={e.item.url} target="_blank" rel="noopener noreferrer">
+                <span class="item-text">
+                  <span class="item-week">#{e.issue} · {e.id} · {e.period}</span>
+                  <b>{e.item.title}</b>
+                  <span class="item-sum">{e.item.summary}</span>
+                  {e.item.note && <span class="item-note">✎ {e.item.note}</span>}
+                </span>
+                <span class="arrow" aria-hidden="true">↗</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      )}
+
+      <p class="note">
+        각 항목은 GeekNews 원문으로 연결됩니다. 주차별 칼럼 전체는
+        <a href="/#toc">발행 목록</a>에서 볼 수 있습니다.
+      </p>
+    </div>
+
+    <p class="issue-outro">「{cat.label}」 · 승인 {entries.length}건</p>
+  </article>
+</BaseLayout>

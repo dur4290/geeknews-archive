@@ -3,7 +3,7 @@ interface Props {
   title: string;
   servings: { label: string; value: string }[];
   colhead: string;
-  rows: { label: string; amt: string; sub?: string }[];
+  rows: { label: string; amt: string; sub?: string; href?: string }[];
   footNotes: string[];
 }
 const { title, servings, colhead, rows, footNotes } = Astro.props;
@@ -19,7 +19,10 @@ const { title, servings, colhead, rows, footNotes } = Astro.props;
   <p class="spec-colhead">{colhead}</p>
   {rows.map((r) => (
     <>
-      <div class="spec-row"><b>{r.label}</b><span class="amt">{r.amt}</span></div>
+      <div class="spec-row">
+        <b>{r.href ? <a href={r.href}>{r.label}</a> : r.label}</b>
+        <span class="amt">{r.amt}</span>
+      </div>
       {r.sub && <div class="spec-row sub"><span>{r.sub}</span></div>}
     </>
   ))}
