@@ -1,0 +1,24 @@
+---
+import type { CategoryGroup } from '../lib/parser.ts';
+
+interface Props {
+  category: CategoryGroup;
+}
+const { category } = Astro.props;
+---
+
+<h2>{category.emoji} {category.label}</h2>
+<ol>
+  {category.items.map((item) => (
+    <li>
+      <a href={item.url} target="_blank" rel="noopener noreferrer">
+        <span class="item-text">
+          <b>{item.title}</b>
+          <span class="item-sum">{item.summary}</span>
+          {item.note && <span class="item-note">✎ {item.note}</span>}
+        </span>
+        <span class="arrow" aria-hidden="true">↗</span>
+      </a>
+    </li>
+  ))}
+</ol>

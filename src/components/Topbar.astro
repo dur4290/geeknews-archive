@@ -1,0 +1,14 @@
+---
+interface Props {
+  left: string;
+  right: string;
+}
+const { left, right } = Astro.props;
+---
+
+<header class="topbar">
+  <div class="wrap">
+    <span>{left}</span>
+    <span>{right}</span>
+  </div>
+</header>

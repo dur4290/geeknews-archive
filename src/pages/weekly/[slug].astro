@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CategorySection from '../../components/CategorySection.astro';
+import IssueNav from '../../components/IssueNav.astro';
+import type { WeekData } from '../../lib/parser.ts';
+import { getAllWeeks } from '../../lib/weeks.ts';
+
+export function getStaticPaths() {
+  const weeks = getAllWeeks();
+  return weeks.map((week, i) => ({
+    params: { slug: week.slug },
+    props: {
+      week,
+      prev: i > 0 ? weeks[i - 1] : undefined,
+      next: i < weeks.length - 1 ? weeks[i + 1] : undefined,
+    },
+  }));
+}
+
+interface Props {
+  week: WeekData;
+  prev?: WeekData;
+  next?: WeekData;
+}
+const { week, prev, next } = Astro.props;
+
+const title = `#${week.issue} ${week.editorialTitle} — GeekNews 주간 칼럼`;
+const description =
+  week.editorialParagraphs[0]?.slice(0, 150) ?? `GeekNews Weekly #${week.issue} 주간 칼럼`;
+---
+
+<BaseLayout title={title} description={description} pathname={`/weekly/${week.slug}/`} ogType="article">
+  <article class="issue">
+    <a class="issue-back" href="/#toc">← 전체 목록</a>
+
+    <header>
+      <div class="issue-head-meta">
+        <span class="no">#{week.issue}<small> / {week.id}</small></span>
+        <span>GeekNews 주간 칼럼</span>
+      </div>
+      <h1>{week.editorialTitle}</h1>
+      <div class="issue-tag">{week.period} · 승인 {week.itemCount}건</div>
+      <hr class="bar-8" />
+    </header>
+
+    <div class="issue-body">
+      {week.editorialParagraphs.map((p) => <p>{p}</p>)}
+
+      {week.categories.map((category) => <CategorySection category={category} />)}
+
+      <p class="note">
+        원문 :
+        <a href={week.weeklyUrl} target="_blank" rel="noopener noreferrer">
+          GeekNews Weekly #{week.issue}
+        </a>
+        에서 전체 목록을 볼 수 있습니다.
+      </p>
+    </div>
+
+    <p class="issue-outro">이번 주에 고른 {week.itemCount}건 — 다음 주에 계속</p>
+
+    <IssueNav prev={prev} next={next} />
+  </article>
+</BaseLayout>

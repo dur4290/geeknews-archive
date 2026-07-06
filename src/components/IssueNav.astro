@@ -1,0 +1,16 @@
+---
+import type { WeekData } from '../lib/parser.ts';
+
+interface Props {
+  prev?: WeekData;
+  next?: WeekData;
+}
+const { prev, next } = Astro.props;
+---
+
+{(prev || next) && (
+  <nav class="issue-nav" aria-label="주차 이동">
+    {prev && <a href={`/weekly/${prev.slug}/`}>← #{prev.issue} {prev.editorialTitle}</a>}
+    {next && <a class="next" href={`/weekly/${next.slug}/`}>#{next.issue} {next.editorialTitle} →</a>}
+  </nav>
+)}

@@ -1,0 +1,92 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Topbar from '../components/Topbar.astro';
+import Ticker from '../components/Ticker.astro';
+import SpecCard from '../components/SpecCard.astro';
+import WeekToc from '../components/WeekToc.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { getAllWeeks, getStats } from '../lib/weeks.ts';
+
+const stats = getStats();
+const { firstWeek, latestWeek } = stats;
+const weeksDesc = [...getAllWeeks()].reverse();
+const issueRange = `#${firstWeek.issue}–#${latestWeek.issue}`;
+
+const description = `매주 GeekNews Weekly에서 직접 고른 뉴스와 에디토리얼을 칼럼으로 보관하는 아카이브. ${issueRange}, 총 ${stats.weekCount}회 · 승인 뉴스 ${stats.itemTotal}건.`;
+---
+
+<BaseLayout title="GeekNews 주간 칼럼 아카이브" description={description} pathname="/">
+  <Topbar left="GeekNews Weekly Archive" right="2026 – · 주간 발행" />
+
+  <section class="hero">
+    <div class="wrap">
+      <p class="hero-kicker">주간 큐레이션 아카이브</p>
+      <h1>GeekNews<br /><em>주간 칼럼</em></h1>
+      <p class="hero-sub">
+        매주 GeekNews Weekly를 읽고 직접 고른 뉴스만 남깁니다.
+        그 주의 에디토리얼과 승인한 소식을 칼럼 한 편으로 보관합니다.
+      </p>
+      <div class="stamp" aria-hidden="true">
+        <small>SINCE 2026</small>
+        <b>{issueRange}</b>
+        <small>WEEKLY</small>
+      </div>
+    </div>
+  </section>
+
+  <Ticker
+    items={[
+      '매주 월요일 갱신',
+      '체크한 뉴스만 싣습니다',
+      'GEEKNEWS WEEKLY ARCHIVE',
+      `${issueRange} · ${stats.itemTotal} NEWS`,
+    ]}
+  />
+
+  <section class="lead">
+    <div class="wrap">
+      <div class="lead-copy">
+        <p class="section-no">01 — 소개</p>
+        <h2>고른 것만,<br />칼럼으로 남긴다</h2>
+        <p>
+          GeekNews Weekly에는 매주 30개가 넘는 소식이 실립니다. 이 아카이브는 그중
+          <b>직접 검토하고 승인한 뉴스만</b> 카테고리별로 정리해 보관합니다.
+        </p>
+        <p>
+          각 주차는 그 주의 흐름을 짚는 에디토리얼로 시작하고, 모든 항목은
+          GeekNews 원문으로 바로 연결됩니다.
+        </p>
+
+        <div class="cta">
+          <span class="cta-label">최신 회차</span>
+          <div class="cta-row">
+            <a class="btn" href={`/weekly/${latestWeek.slug}/`}>#{latestWeek.issue} 읽기</a>
+          </div>
+          <p class="cta-note">{latestWeek.period} · {latestWeek.editorialTitle}</p>
+        </div>
+      </div>
+
+      <SpecCard
+        title="아카이브 성분표"
+        servings={[
+          { label: '총 주차', value: `${stats.weekCount}회` },
+          { label: '수록 기간', value: `${firstWeek.id} – ${latestWeek.id}` },
+          { label: '승인 뉴스', value: `${stats.itemTotal}건` },
+        ]}
+        colhead="카테고리별 함량"
+        rows={stats.categoryCounts.map((c) => ({
+          label: `${c.emoji} ${c.label}`,
+          amt: `${c.count}건`,
+        }))}
+        footNotes={[
+          '체크([x])된 항목만 수록합니다.',
+          '모든 항목은 news.hada.io 원문으로 연결됩니다.',
+        ]}
+      />
+    </div>
+  </section>
+
+  <WeekToc weeks={weeksDesc} />
+
+  <SiteFooter />
+</BaseLayout>

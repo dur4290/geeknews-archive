@@ -1,0 +1,41 @@
+---
+import '../styles/paper-ink.css';
+import '../styles/site.css';
+
+interface Props {
+  title: string;
+  description: string;
+  /** 예: "/", "/weekly/2026-w27/" */
+  pathname: string;
+  ogType?: 'website' | 'article';
+}
+
+const { title, description, pathname, ogType = 'website' } = Astro.props;
+// canonical/OG 절대 URL은 astro.config.mjs의 site 설정 후 활성화 (Phase 5)
+const canonical = Astro.site ? new URL(pathname, Astro.site).href : undefined;
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {canonical && <link rel="canonical" href={canonical} />}
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:locale" content="ko_KR" />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <!-- Pretendard (선택): 오프라인이면 시스템 폰트로 대체됨 -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+    />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

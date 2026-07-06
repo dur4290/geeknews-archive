@@ -1,0 +1,28 @@
+/* 아카이브 전용 추가 스타일 — paper-ink.css 원본은 수정하지 않는다 */
+
+/* 주차 칼럼 아이템: 제목 + 한 줄 요약 + (선택) 코멘트의 세로 구성 */
+.issue-body ol li a .item-text {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+  min-width: 0;
+}
+.issue-body ol li a .item-text .item-sum {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ink-60);
+}
+.issue-body ol li a:hover .item-text .item-sum { color: inherit; }
+.issue-body ol li a .item-text .item-note {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--red);
+}
+
+/* toc 칩에 두 자리 승인 건수 표기 */
+.toc-list .chip {
+  width: auto;
+  min-width: 1.7rem;
+  padding: 0 0.4rem;
+}

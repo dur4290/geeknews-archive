@@ -1,0 +1,34 @@
+---
+import type { WeekData } from '../lib/parser.ts';
+
+interface Props {
+  /** 표시 순서 그대로 렌더 (호출부에서 최신순 정렬) */
+  weeks: WeekData[];
+}
+const { weeks } = Astro.props;
+---
+
+<section class="toc" id="toc">
+  <div class="wrap">
+    <div class="toc-head">
+      <div>
+        <p class="section-no">02 — 발행 목록</p>
+        <h2>주간 칼럼</h2>
+      </div>
+      <p class="toc-meta">총 {weeks.length}회<br />최신순 정렬</p>
+    </div>
+    <ol class="toc-list">
+      {weeks.map((w) => (
+        <li>
+          <a href={`/weekly/${w.slug}/`}>
+            <span class="toc-no">#{w.issue}</span>
+            <span class="toc-title">{w.editorialTitle}</span>
+            <span class="toc-sub">{w.period}</span>
+            <span class="chip" title="승인 건수">{w.itemCount}</span>
+          </a>
+        </li>
+      ))}
+    </ol>
+    <p class="toc-note">매주 GeekNews Weekly 승인 후 새 칼럼이 추가됩니다.</p>
+  </div>
+</section>

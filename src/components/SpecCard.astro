@@ -1,0 +1,30 @@
+---
+interface Props {
+  title: string;
+  servings: { label: string; value: string }[];
+  colhead: string;
+  rows: { label: string; amt: string; sub?: string }[];
+  footNotes: string[];
+}
+const { title, servings, colhead, rows, footNotes } = Astro.props;
+---
+
+<aside class="spec" aria-label={title}>
+  <p class="spec-title">{title}</p>
+  <hr class="bar-1" />
+  {servings.map((s) => (
+    <div class="spec-serving"><span>{s.label}</span><span>{s.value}</span></div>
+  ))}
+  <hr class="bar-8" />
+  <p class="spec-colhead">{colhead}</p>
+  {rows.map((r) => (
+    <>
+      <div class="spec-row"><b>{r.label}</b><span class="amt">{r.amt}</span></div>
+      {r.sub && <div class="spec-row sub"><span>{r.sub}</span></div>}
+    </>
+  ))}
+  <hr class="bar-4" />
+  <div class="spec-foot">
+    {footNotes.map((note) => <p>* {note}</p>)}
+  </div>
+</aside>

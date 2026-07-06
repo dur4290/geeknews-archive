@@ -1,0 +1,14 @@
+---
+interface Props {
+  items: string[];
+}
+const { items } = Astro.props;
+// paper-ink 규칙: 같은 span 묶음을 2회 반복해야 무한 루프가 끊기지 않는다
+const doubled = [...items, ...items];
+---
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    {doubled.map((text) => <span>{text} ✱</span>)}
+  </div>
+</div>

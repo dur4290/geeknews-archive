@@ -1,0 +1,21 @@
+{
+  "name": "geeknews-archive",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "sync": "node scripts/sync.mjs",
+    "validate": "node scripts/validate.mjs"
+  },
+  "dependencies": {
+    "astro": "^7.0.6"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "typescript": "^6.0.3"
+  }
+}
