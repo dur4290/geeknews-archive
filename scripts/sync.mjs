@@ -6,7 +6,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = dirname(dirname(fileURLToPath(import.meta.url)));
-const SOURCE = 'C:\\AI-WORKSPACE-학생배포용\\60-operations\\61-geeknews-digest\\checklist';
+const SOURCE = join(ROOT, '..', '..', '..', '..', '60-operations', '61-geeknews-digest', 'checklist');
 const TARGET = join(ROOT, 'src', 'data', 'checklists');
 
 mkdirSync(TARGET, { recursive: true });
